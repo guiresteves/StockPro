@@ -22,6 +22,7 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true)
     @NotBlank
     private String nome;
 

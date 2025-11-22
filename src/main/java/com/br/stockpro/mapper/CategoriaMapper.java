@@ -3,16 +3,15 @@ package com.br.stockpro.mapper;
 import com.br.stockpro.dtos.categoria.CategoriaRequestDTO;
 import com.br.stockpro.dtos.categoria.CategoriaResponseDTO;
 import com.br.stockpro.model.Categoria;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoriaMapper {
 
     // Converte de DTO -> Entity
-    Categoria toEntity(CategoriaResponseDTO dto);
+    Categoria toEntity(CategoriaRequestDTO dto);
 
     // Converter Entity -> ResponseDTO
     CategoriaResponseDTO toResponseDTO(Categoria categoria);
