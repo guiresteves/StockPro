@@ -1,5 +1,6 @@
 package com.br.stockpro.service;
 
+import com.br.stockpro.dtos.categoria.CategoriaListDTO;
 import com.br.stockpro.dtos.categoria.CategoriaRequestDTO;
 import com.br.stockpro.dtos.categoria.CategoriaResponseDTO;
 import com.br.stockpro.exceptions.BusinessException;
@@ -30,7 +31,7 @@ public class CategoriaService {
         return categoriaMapper.toResponseDTO(categoriaRepository.save(categoria));
     }
 
-    public List<CategoriaResponseDTO> findAll() {
+    public List<CategoriaListDTO> findAll() {
         return categoriaMapper.toListDTO(categoriaRepository.findAll());
     }
 
@@ -45,7 +46,7 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
 
-        if (categoriaRepository.existsByNome(dto.nome())) {
+        if (categoriaRepository.existsByNomeAndIdNot(dto.nome(), id)) {
             throw new BusinessException("Já existe uma categoria com esse nome.");
         }
 
@@ -55,7 +56,7 @@ public class CategoriaService {
 
     public void delete(UUID id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrado"));
 
         categoriaRepository.delete(categoria);
     }

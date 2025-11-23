@@ -12,15 +12,20 @@ import java.util.List;
 public interface ProdutoMapper {
 
     // Converte de DTO -> Entity
+    @Mapping(target = "categoria", ignore = true)
     Produto toEntity(ProdutoRequestDTO dto);
 
     // Converter Entity -> ResponseDTO
+    @Mapping(source = "categoria.id", target = "categoriaId")
+    @Mapping(source = "categoria.nome", target = "categoriaNome")
     ProdutoResponseDTO toResponseDTO(Produto produto);
 
     // Converter Entity -> ListDTO
-    List<ProdutoResponseDTO> toListDTO(List<Produto> produtos);
+    List<ProdutoListDTO> toListDTO(List<Produto> produtos);
 
     // Atualizar um entity existente com dados do DTO (PUT)
+
+    @Mapping(target = "categoria", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(ProdutoRequestDTO dto, @MappingTarget Produto entity);
 }

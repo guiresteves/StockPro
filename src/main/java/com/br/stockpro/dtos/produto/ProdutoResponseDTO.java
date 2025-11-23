@@ -19,6 +19,8 @@ public record ProdutoResponseDTO(
         BigDecimal precoVenda,
         Boolean ativo,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        UUID categoriaId,
+        String categoriaNome
 ) {
 }

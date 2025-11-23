@@ -1,5 +1,6 @@
 package com.br.stockpro.controller;
 
+import com.br.stockpro.dtos.categoria.CategoriaListDTO;
 import com.br.stockpro.dtos.categoria.CategoriaRequestDTO;
 import com.br.stockpro.dtos.categoria.CategoriaResponseDTO;
 import com.br.stockpro.service.CategoriaService;
@@ -26,8 +27,8 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoriaResponseDTO>> findAll() {
-        List<CategoriaResponseDTO> categorias = categoriaService.findAll();
+    public ResponseEntity<List<CategoriaListDTO>> findAll() {
+        List<CategoriaListDTO> categorias = categoriaService.findAll();
         return ResponseEntity.ok(categorias);
     }
 

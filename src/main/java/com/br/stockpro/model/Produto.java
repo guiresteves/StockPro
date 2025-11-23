@@ -63,6 +63,10 @@ public class Produto {
     @Column(nullable = false)
     private Boolean ativo = true;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
     private Instant createdAt;
     private Instant updatedAt;
 

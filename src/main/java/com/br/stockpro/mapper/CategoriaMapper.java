@@ -1,5 +1,6 @@
 package com.br.stockpro.mapper;
 
+import com.br.stockpro.dtos.categoria.CategoriaListDTO;
 import com.br.stockpro.dtos.categoria.CategoriaRequestDTO;
 import com.br.stockpro.dtos.categoria.CategoriaResponseDTO;
 import com.br.stockpro.model.Categoria;
@@ -17,7 +18,7 @@ public interface CategoriaMapper {
     CategoriaResponseDTO toResponseDTO(Categoria categoria);
 
     // Converter Entity -> ListDTO
-    List<CategoriaResponseDTO> toListDTO(List<Categoria> categorias);
+    List<CategoriaListDTO> toListDTO(List<Categoria> categorias);
 
     // Atualizar um entity existente com dados do DTO (PUT)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

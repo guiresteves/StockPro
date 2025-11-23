@@ -1,13 +1,20 @@
 package com.br.stockpro.dtos.produto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public record ProdutoListDTO(
         UUID id,
         String nome,
+        String descricao,
         String codigoBarras,
+        String unidade,
         Integer estoqueAtual,
         Integer estoqueMinimo,
-        Boolean ativo
+        BigDecimal precoCusto,
+        BigDecimal precoVenda,
+        Boolean ativo,
+        UUID categoriaId,
+        String categoriaNome
 ) {
 }
