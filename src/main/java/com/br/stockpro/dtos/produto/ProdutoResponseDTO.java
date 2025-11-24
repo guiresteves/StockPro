@@ -1,10 +1,13 @@
 package com.br.stockpro.dtos.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Schema(description = "DTO de resposta detalhada de um produto")
 public record ProdutoResponseDTO(
         UUID id,
         String nome,

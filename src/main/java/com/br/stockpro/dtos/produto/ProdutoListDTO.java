@@ -1,8 +1,11 @@
 package com.br.stockpro.dtos.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Schema(description = "DTO usado para listagem de produtos")
 public record ProdutoListDTO(
         UUID id,
         String nome,

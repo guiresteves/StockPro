@@ -1,5 +1,6 @@
 package com.br.stockpro.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -65,6 +66,7 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @Schema(hidden = true)
     private Categoria categoria;
 
     private Instant createdAt;

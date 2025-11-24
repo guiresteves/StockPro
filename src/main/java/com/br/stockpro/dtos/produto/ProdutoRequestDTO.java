@@ -1,5 +1,6 @@
 package com.br.stockpro.dtos.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Schema(description = "DTO de entrada para criação ou atualização de um produto")
 public record ProdutoRequestDTO(
 
         @NotBlank

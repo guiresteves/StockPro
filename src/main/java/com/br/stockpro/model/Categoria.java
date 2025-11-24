@@ -1,17 +1,12 @@
 package com.br.stockpro.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "categorias")
@@ -31,6 +26,7 @@ public class Categoria {
 
     @OneToMany(mappedBy = "categoria")
     @JsonIgnore
+    @Schema(hidden = true)
     private List<Produto> produtos = new ArrayList<>();
 
     private Instant createdAt;
