@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "movimentacao")
+@Table(name = "movimentacoes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,19 +29,30 @@ public class Movimentacao {
     private Produto produto;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private TipoMovimentacao tipoMovimentacao;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Integer quantidade;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Integer estoqueAnterior;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Integer estoquePosterior;
 
     private String observacao;
+
+    // Campos provisórios até criar módulo de Loja
+    private UUID lojaOrigemId;
+    private UUID lojaDestinoId;
+
+    // Campo provisório até existir o módulo de usuário
+    private UUID usuarioId;
+
+    // Auditoria de referência externa
+    private UUID referenciaId;
+    private String referenciaTipo;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
