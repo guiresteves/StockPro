@@ -1,28 +1,25 @@
 package com.br.stockpro.dtos.movimentacao;
 
 import com.br.stockpro.enums.TipoMovimentacao;
-import jakarta.validation.constraints.NotNull;
 
+import java.time.Instant;
 import java.util.UUID;
 
-public record MovimentacaoRequestDTO(
-        @NotNull
+public record MovimentacaoListDTO(
+        UUID id,
         UUID produtoId,
-
+        String produtoNome,
         TipoMovimentacao tipoMovimentacao,
-
-        @NotNull
         Integer quantidade,
-
+        Integer estoqueAnterior,
+        Integer estoquePosterior,
         String observacao,
-
         UUID lojaOrigemId,
-
         UUID lojaDestinoId,
-
         UUID usuarioId,
-
         UUID referenciaId,
-
-        String referenciaTipo
-) {}
+        String referenciaTipo,
+        Instant createdAt,
+        Instant updatedAt
+) {
+}
