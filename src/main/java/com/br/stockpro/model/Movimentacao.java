@@ -24,8 +24,8 @@ public class Movimentacao {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "produto_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "produto_id")
     private Produto produto;
 
     @Enumerated(EnumType.STRING)
@@ -36,16 +36,27 @@ public class Movimentacao {
     private Integer quantidade;
 
     @Column(nullable = false)
-    private Integer estoqueAtual;
+    private Integer estoqueAnterior;
 
     @Column(nullable = false)
     private Integer estoquePosterior;
 
     private String observacao;
 
-    @Column(nullable = false)
-    private LocalDateTime dataMovimentacao = LocalDateTime.now();
-
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
+
+    @Column(nullable = false)
     private Instant updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }
