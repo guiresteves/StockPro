@@ -1,5 +1,6 @@
 package com.br.stockpro.service;
 
+import com.br.stockpro.dtos.movimentacao.MovimentacaoListDTO;
 import com.br.stockpro.dtos.movimentacao.MovimentacaoRequestDTO;
 import com.br.stockpro.dtos.movimentacao.MovimentacaoResponseDTO;
 import com.br.stockpro.enums.TipoMovimentacao;
@@ -11,7 +12,9 @@ import com.br.stockpro.repository.MovimentacaoRepository;
 import com.br.stockpro.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,40 +25,34 @@ public class MovimentacaoService {
     private final ProdutoRepository produtoRepository;
     private final MovimentacaoMapper movimentacaoMapper;
 
-
+    @Transactional
     public MovimentacaoResponseDTO create(MovimentacaoRequestDTO dto) {
 
         Produto produto = produtoRepository.findById(dto.produtoId())
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
 
-        // Criar entity base
-        Movimentacao mov = movimentacaoMapper.toEntity(dto);
+        Movimentacao movimentacao = movimentacaoMapper.toEntity(dto);
+        movimentacao.setProduto(produto);
 
-        // Setar produto (foi ignorado pelo mapper)
-        mov.setProduto(produto);
+        movimentacao.setReferenciaId(dto.referenciaId());
+        movimentacao.setReferenciaTipo(dto.referenciaTipo());
+        movimentacao.setUsuarioId(dto.usuarioId());
 
-        // Estoque anterior
         Integer estoqueAtual = produto.getEstoqueAtual();
-        mov.setEstoqueAnterior(estoqueAtual);
+        movimentacao.setEstoqueAnterior(estoqueAtual);
 
-        // Aplicar regra da operação
-        Integer novoEstoque = aplicarRegraDeEstoque(dto.tipoMovimentacao(), estoqueAtual, dto.quantidade());
+        Integer novoEstoque = calcularNovoEstoque(dto.tipoMovimentacao(), estoqueAtual, dto.quantidade());
 
-        mov.setEstoquePosterior(novoEstoque);
+        movimentacao.setEstoquePosterior(novoEstoque);
 
-        // Atualizar estoque do produto
         produto.setEstoqueAtual(novoEstoque);
         produtoRepository.save(produto);
 
-        // Salvar movimentação
-        Movimentacao saved = movimentacaoRepository.save(mov);
+        Movimentacao saved = movimentacaoRepository.save(movimentacao);
 
         return movimentacaoMapper.toResponseDTO(saved);
     }
 
-    // -------------------------------------------------------
-    // Buscar por ID
-    // -------------------------------------------------------
     public MovimentacaoResponseDTO findById(UUID id) {
         Movimentacao mov = movimentacaoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação não encontrada"));
@@ -63,30 +60,45 @@ public class MovimentacaoService {
         return movimentacaoMapper.toResponseDTO(mov);
     }
 
-    // -------------------------------------------------------
-    // Regras de estoque
-    // -------------------------------------------------------
-    private Integer aplicarRegraDeEstoque(TipoMovimentacao tipo, Integer estoqueAtual, Integer quantidade) {
+    public List<MovimentacaoListDTO> listAll() {
+        return movimentacaoMapper.toListDTO(movimentacaoRepository.findAll());
+    }
 
-        if (quantidade == null || quantidade <= 0)
+    private Integer calcularNovoEstoque(TipoMovimentacao tipoMovimentacao, Integer estoqueAtual, Integer quantidade) {
+
+        if (quantidade == null || quantidade <= 0) {
             throw new IllegalArgumentException("A quantidade deve ser maior que zero");
+        }
 
-        return switch (tipo) {
+        return switch (tipoMovimentacao) {
 
             case ENTRADA -> estoqueAtual + quantidade;
 
             case SAIDA -> {
-                if (quantidade > estoqueAtual)
+                if (quantidade > estoqueAtual) {
                     throw new IllegalArgumentException("Estoque insuficiente para saída");
+                }
                 yield estoqueAtual - quantidade;
             }
-        };
-    }
 
-    // -------------------------------------------------------
-    // Listar todas (pode ser com paginação futuramente)
-    // -------------------------------------------------------
-    public java.util.List<com.br.stockpro.dtos.movimentacao.MovimentacaoListDTO> listAll() {
-        return movimentacaoMapper.toListDTO(movimentacaoRepository.findAll());
+            case AVARIA -> {
+                if (quantidade > estoqueAtual) {
+                    throw new IllegalArgumentException("Quantidade de avaria maior que o estoque atual");
+                }
+                yield estoqueAtual - quantidade;
+            }
+
+            case AJUSTE -> quantidade;
+
+
+            case TRANSFERENCIA -> {
+                if (quantidade > estoqueAtual) {
+                    throw new IllegalArgumentException("Transferencia maior que o estoque disponível");
+                }
+                yield estoqueAtual - quantidade;
+            }
+
+            default -> throw new IllegalArgumentException("Tipo de movimentação não suportado");
+        };
     }
 }
