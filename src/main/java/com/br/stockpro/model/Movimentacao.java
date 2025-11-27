@@ -47,8 +47,8 @@ public class Movimentacao {
     private String observacao;
 
     // Campos provisórios até criar módulo de Loja
-    private UUID lojaOrigemId;
-    private UUID lojaDestinoId;
+    @Column(nullable = false)
+    private UUID lojaId;
 
     // Campo provisório até existir o módulo de usuário
     private UUID usuarioId;

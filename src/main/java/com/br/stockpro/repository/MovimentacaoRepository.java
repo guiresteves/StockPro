@@ -27,9 +27,39 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, UUID
             Instant fim
     );
 
+    List<Movimentacao> findByLojaId(UUID lojaId);
+
+    List<Movimentacao> findByLojaIdAndCreatedAtBetween(
+            UUID lojaId,
+            Instant inicio,
+            Instant fim
+    );
+
     List<Movimentacao> findByTipoMovimentacaoAndCreatedAtBetween(
             TipoMovimentacao tipo,
             Instant inicio,
             Instant fim
     );
+
+    List<Movimentacao> findByProdutoIdAndTipoMovimentacaoAndCreatedAtBetween(
+            UUID produtoId,
+            TipoMovimentacao tipo,
+            Instant inicio,
+            Instant fim
+    );
+
+    List<Movimentacao> findByLojaIdAndTipoMovimentacaoAndCreatedAtBetween(
+            UUID lojaId,
+            TipoMovimentacao tipo,
+            Instant inicio,
+            Instant fim
+    );
+
+    List<Movimentacao> findByProdutoIdAndLojaIdAndCreatedAtBetween(
+            UUID produtoId,
+            UUID lojaId,
+            Instant inicio,
+            Instant fim
+    );
+
 }

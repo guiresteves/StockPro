@@ -43,6 +43,7 @@ public class MovimentacaoService {
         movimentacao.setReferenciaId(dto.referenciaId());
         movimentacao.setReferenciaTipo(dto.referenciaTipo());
         movimentacao.setUsuarioId(dto.usuarioId());
+        movimentacao.setLojaId(dto.lojaId());
 
         Integer estoqueAtual = produto.getEstoqueAtual();
         movimentacao.setEstoqueAnterior(estoqueAtual);
@@ -94,7 +95,6 @@ public class MovimentacaoService {
     public MovimentacaoResponseDTO findById(UUID id) {
         Movimentacao mov = movimentacaoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação não encontrada"));
-
         return movimentacaoMapper.toResponseDTO(mov);
     }
 
@@ -114,6 +114,10 @@ public class MovimentacaoService {
         return movimentacaoMapper.toListDTO(movimentacaoRepository.findByReferenciaId(referenciaId));
     }
 
+    public List<MovimentacaoListDTO> findByLojaId(UUID lojaId) {
+        return movimentacaoMapper.toListDTO(movimentacaoRepository.findByLojaId(lojaId));
+    }
+
     public List<MovimentacaoListDTO> findByPeriodo(Instant inicio, Instant fim) {
         validarPeriodo(inicio, fim);
         return movimentacaoMapper.toListDTO(movimentacaoRepository.findByCreatedAtBetween(inicio, fim));
@@ -121,9 +125,55 @@ public class MovimentacaoService {
 
     public List<MovimentacaoListDTO> findByProdutoPeriodo(UUID produtoId, Instant inicio, Instant fim) {
         validarPeriodo(inicio, fim);
-
         return movimentacaoMapper.toListDTO(
                 movimentacaoRepository.findByProdutoIdAndCreatedAtBetween(produtoId, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findByLojaPeriodo(UUID lojaId, Instant inicio, Instant fim) {
+        validarPeriodo(inicio, fim);
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByLojaIdAndCreatedAtBetween(lojaId, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findByTipoPeriodo(TipoMovimentacao tipo, Instant inicio, Instant fim) {
+        validarPeriodo(inicio, fim);
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByTipoMovimentacaoAndCreatedAtBetween(tipo, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findByProdutoTipoPeriodo(UUID produtoId, TipoMovimentacao tipo, Instant inicio, Instant fim) {
+        validarPeriodo(inicio, fim);
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByProdutoIdAndTipoMovimentacaoAndCreatedAtBetween(produtoId, tipo, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findByLojaTipoPeriodo(UUID lojaId, TipoMovimentacao tipo, Instant inicio, Instant fim) {
+        validarPeriodo(inicio, fim);
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByLojaIdAndTipoMovimentacaoAndCreatedAtBetween(lojaId, tipo, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findByProdutoLojaPeriodo(UUID produtoId, UUID lojaId, Instant inicio, Instant fim) {
+        validarPeriodo(inicio, fim);
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByProdutoIdAndLojaIdAndCreatedAtBetween(produtoId, lojaId, inicio, fim)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findHistoricoProduto(UUID produtoId) {
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findByProdutoIdOrderByCreatedAtDesc(produtoId)
+        );
+    }
+
+    public List<MovimentacaoListDTO> findAllOrderByDataDesc() {
+        return movimentacaoMapper.toListDTO(
+                movimentacaoRepository.findAllByOrderByCreatedAtDesc()
         );
     }
 

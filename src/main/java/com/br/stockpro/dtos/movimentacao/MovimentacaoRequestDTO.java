@@ -13,8 +13,7 @@ public record MovimentacaoRequestDTO(
         @NotNull
         Integer quantidade,
         String observacao,
-        UUID lojaOrigemId,
-        UUID lojaDestinoId,
+        UUID lojaId,
         UUID usuarioId,
         UUID referenciaId,
         String referenciaTipo

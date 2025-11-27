@@ -39,6 +39,7 @@ public class AjusteService {
         mov.setDiferencaAjuste(estoqueNovo - estoqueAnterior);
         mov.setObservacao(dto.observacao());
         mov.setUsuarioId(dto.usuarioId());
+        mov.setLojaId(dto.lojaId());
 
         produto.setEstoqueAtual(estoqueNovo);
         produtoRepository.save(produto);

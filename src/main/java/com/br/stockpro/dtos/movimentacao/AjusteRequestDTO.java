@@ -6,6 +6,7 @@ public record AjusteRequestDTO(
         UUID produtoId,
         Integer novoEstoque,
         String observacao,
-        UUID usuarioId
+        UUID usuarioId,
+        UUID lojaId
 ) {
 }
