@@ -17,6 +17,7 @@ public interface MovimentacaoMapper {
     @Mapping(target = "estoquePosterior", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "diferencaAjuste", ignore = true)
     Movimentacao toEntity(MovimentacaoRequestDTO dto);
 
     @Mapping(source = "produto.id", target = "produtoId")

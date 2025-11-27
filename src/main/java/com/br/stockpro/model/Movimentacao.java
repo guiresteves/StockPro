@@ -41,6 +41,9 @@ public class Movimentacao {
     @Column(nullable = false, updatable = false)
     private Integer estoquePosterior;
 
+    @Column
+    private Integer diferencaAjuste;
+
     private String observacao;
 
     // Campos provisórios até criar módulo de Loja

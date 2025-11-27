@@ -8,6 +8,7 @@ import java.util.UUID;
 public record MovimentacaoRequestDTO(
         @NotNull
         UUID produtoId,
+        @NotNull
         TipoMovimentacao tipoMovimentacao,
         @NotNull
         Integer quantidade,

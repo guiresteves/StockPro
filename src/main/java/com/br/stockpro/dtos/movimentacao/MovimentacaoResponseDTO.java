@@ -13,6 +13,7 @@ public record MovimentacaoResponseDTO(
         Integer quantidade,
         Integer estoqueAnterior,
         Integer estoquePosterior,
+        Integer diferenca,
         String observacao,
         UUID lojaOrigemId,
         UUID lojaDestinoId,

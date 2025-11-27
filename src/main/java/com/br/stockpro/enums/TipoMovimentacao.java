@@ -4,6 +4,5 @@ public enum TipoMovimentacao {
     ENTRADA,
     SAIDA,
     AVARIA,
-    AJUSTE,
-    TRANSFERENCIA
+    AJUSTE
 }
